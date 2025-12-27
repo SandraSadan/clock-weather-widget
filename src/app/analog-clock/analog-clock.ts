@@ -1,6 +1,8 @@
 import { Component, signal, OnDestroy, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-analog-clock',
@@ -11,6 +13,7 @@ import { isPlatformBrowser } from '@angular/common';
 export class AnalogClock implements OnDestroy {
   private platformId = inject(PLATFORM_ID);
   private isBrowser = isPlatformBrowser(this.platformId);
+  private http = inject(HttpClient);
 
   hourDeg = signal(0);
   minuteDeg = signal(0);
@@ -18,7 +21,7 @@ export class AnalogClock implements OnDestroy {
   formattedDate = signal('');
 
   // Static weather
-  weatherIcon = signal('assets/cloud.svg');
+  weatherIcon = signal('☁️');
   temperature = signal('9°C');
 
   // 12 tick array
@@ -27,7 +30,10 @@ export class AnalogClock implements OnDestroy {
   private intervalId: number | null = null;
 
   constructor() {
-    if (this.isBrowser) this.startClock();
+    if (this.isBrowser) {
+      this.startClock();
+      this.fetchWeather();
+    }
   }
 
   private startClock() {
@@ -68,6 +74,30 @@ export class AnalogClock implements OnDestroy {
     return `${days[date.getDay()]}, ${
       months[date.getMonth()]
     } ${date.getDate()}`;
+  }
+
+  private fetchWeather() {
+    // Latitude and longitude of London region
+    const lat = 51.5074;
+    const lon = -0.1278;
+
+    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${environment.weatherApiKey}`;
+
+    this.http.get<any>(url).subscribe({
+      next: (data) => {
+        // If data exists, update signals
+        if (data && data.main && data.weather?.[0]) {
+          this.temperature.set(`${Math.round(data.main.temp)}°C`);
+          this.weatherIcon.set(
+            `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`
+          );
+        }
+      },
+      error: () => {
+        // Keep default static values on error
+        console.warn('Weather API failed, using default values');
+      },
+    });
   }
 
   ngOnDestroy() {

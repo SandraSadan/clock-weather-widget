@@ -28,7 +28,8 @@
 
     <!-- Static Weather -->
     <div class="overlay weather">
-        <span class="icon">☁️</span>
+        <!-- <span class="icon"></span> -->
+        <img [src]="weatherIcon()" alt="weather icon" />
         <span>{{ temperature() }}</span>
     </div>
 
