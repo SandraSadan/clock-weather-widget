@@ -57,3 +57,40 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+## Clock & Weather Widget
+
+An **Angular v20 standalone application** that displays a functional analogue clock with **date** and **weather overlay**. Current Weather of London is diplayed and styled inside the clock using OpenWeather API.
+
+## Features
+
+- Analogue clock with smooth hour, minute, and second hands
+- 12-hour ticks with **dark ticks at 12, 3, 6, 9**
+- Date overlay inside the clock (`THU, DEC 25` format)
+- Weather overlay inside the clock (live cloud icon and temperature)
+- Minimalist, modern design with pill-style overlays
+
+## Installation
+
+1. **Clone the repository:**
+
+```bash
+git clone <repo-url>
+cd <your-repo-folder>
+```
+
+2. **Install dependencies:**
+
+```bash
+npm install
+```
+
+3. **Add your OpenWeather API key:**
+
+```bash
+// src/environments/environment.ts
+export const environment = {
+  production: false,
+  weatherApiKey: 'YOUR_API_KEY_HERE'
+};
+```
