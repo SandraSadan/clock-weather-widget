@@ -1,1 +1,35 @@
-<p>analog-clock works!</p>
+<div class="clock">
+
+    <!-- Rings -->
+    <div class="ring outer"></div>
+    <div class="ring inner"></div>
+
+    <!-- 12 Hour Ticks -->
+    <div class="ticks">
+        @for (tick of hourTicks; track tick) {
+        <span class="tick" [class.dark]="tick === 0 || tick === 3 || tick === 6 || tick === 9"
+            [class.light]="!(tick === 0 || tick === 3 || tick === 6 || tick === 9)"
+            [style.transform]="'rotate(' + (tick * 30) + 'deg)'"></span>
+        }
+    </div>
+
+    <!-- Hands -->
+    <div class="hand hour" [style.transform]="'rotate(' + hourDeg() + 'deg)'"></div>
+    <div class="hand minute" [style.transform]="'rotate(' + minuteDeg() + 'deg)'"></div>
+    <div class="hand second" [style.transform]="'rotate(' + secondDeg() + 'deg)'"></div>
+
+    <!-- Pivot -->
+    <div class="pivot"></div>
+
+    <!-- Date -->
+    <div class="overlay date">
+        {{ formattedDate() }}
+    </div>
+
+    <!-- Static Weather -->
+    <div class="overlay weather">
+        <span class="icon">☁️</span>
+        <span>{{ temperature() }}</span>
+    </div>
+
+</div>
